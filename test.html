@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Test drag</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="on.js"></script>
+	<script src="droppable.js"></script>
+<style>
+
+body {
+  margin: 2em;
+}
+
+.container {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 10px;
+	margin: 2em;
+}
+
+.box {
+	border: 3px solid #666;
+	background-color: #ddd;
+	border-radius: .5em;
+	padding: 10px;
+}
+
+[draggable] {
+	user-select: none;
+	cursor: move;
+}
+
+[draggable].dragging {
+	opacity:0.4;
+}
+
+[droppable].droppable {
+	border-color: #3C3;
+}
+
+[droppable].icon DIV.dropped-file {
+	display:inline-block;
+	margin:8px;
+	padding-top:40px;
+	position:relative;
+	font-family:monospace;
+	font-size:12px;
+	text-align:center;
+}
+
+[droppable].icon DIV.dropped-file:before {
+	content:"";
+	background: no-repeat center url("file-icon.svg");
+	height:40px;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+}
+
+[droppable].icon DIV.dropped-file:after {
+	content:"";
+	background: no-repeat center url("delete.svg");
+	height:12px;
+	position:absolute;
+	top:0;
+	left:16px;
+	right:-16px;
+}
+
+[droppable].list DIV.dropped-file {
+	padding:4px 0 4px 38px;
+	position:relative;
+	font-family:monospace;
+	font-size:12px;
+	text-overflow: ellipsis;
+	overflow: hidden; 
+	white-space: nowrap;
+}
+
+[droppable].list DIV.dropped-file:before {
+	content:"";
+	background: no-repeat center url("file-icon.svg");
+	position:absolute;
+	top:2px;
+	left:16px;
+	height:18px;
+	width:18px;
+}
+
+[droppable].list DIV.dropped-file:after {
+	content:"";
+	background: no-repeat center url("delete.svg");
+	position:absolute;
+	top:5px;
+	left:0px;
+	width:12px;
+	height:12px;
+}
+</style>
+
+
+<script>
+
+// Receive text
+On( 'dropcomplete', '[droppable][flavor="text"]', function( evt ) {
+	this.textContent = typeof evt.data === "string" ? evt.data : evt.data.textContent;
+});
+
+// Receive files
+On( 'dropcomplete', '[droppable][flavor="file"]', function( evt ) {
+	for( let i=0; i<evt.data.length; i++ ) {
+		let file = evt.data.item(i);
+
+		// Create file icon
+		let node = document.createElement('DIV');
+		node.classList.add('dropped-file');
+		node.textContent = file.name;
+
+		// Remove placeholder text
+		if( this.firstChild.nodeName === '#text' )
+		this.textContent = '';
+
+		// Add icon
+		this.appendChild(node);
+	}
+});
+
+</script>
+</head>
+
+  <body>
+    <div class="container">
+        <div draggable="true" flavor="text" class="box">
+		Drag me as text<br/>
+		<img width="64" src="file-icon.svg"></img>
+	</div>
+        <div draggable="true" flavor="text" class="box">This is text</div>
+        <div draggable="true" flavor="text" class="box">Another text</div>
+    </div>
+    <div class="container">
+        <div droppable="true" flavor="text" class="box">
+		Drop text here<br/>
+		<img width="64" src="file-icon.svg"></img>
+	</div>
+        <div droppable="true" flavor="text" class="box">Or here</div>
+    </div>
+    <div class="container">
+        <div droppable="true" flavor="file" class="box icon">Drop files here (icons)</div>
+        <div droppable="true" flavor="file" class="box list">Drop files here (list)</div>
+    </div>
+  </body>
+
+</html>
+
