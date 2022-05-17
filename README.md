@@ -1,9 +1,8 @@
 # droppable
 Ease html drag &amp; drop by adding the 'flavor' and 'droppable' attributes.
 
-    Add attributes 'droppable' and 'flavor' to html
- 
-    An element marked draggable="yes" and flavor="xxx" will become droppable on any other, marked droppable="yes" and flavor="xxx".
+    An element marked draggable="yes" and flavor="xxx" will become droppable on any other, marked droppable="yes"
+    and flavor="xxx".
     Text drags comming from the outside world can be dropped on "text" flavored droppables
     File drags comming from the outside world can be dropped on "file" flavored droppables
  
